@@ -10,7 +10,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/app/lokasi-perumahan/housing.model"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]
