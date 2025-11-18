@@ -1,42 +1,34 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Housing } from '../lokasi-perumahan/housing.model';
+import { HOUSING_DATA } from '../data/housing-data';  // ← Import shared data
 
 @Component({
   selector: 'app-detail',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, RouterLink], // common module itu digunakan ketika implementasi ngfor, dan segala ng
   templateUrl: './detail.html',
-  styleUrl: './detail.css',
+  styleUrl: './detail.css'
 })
 export class Detail implements OnInit {
-  housing : Housing | null =null;
-  
-
-
-export class Detail implements OnInit {
-  // Asumsi tipe Housing
-  housing: any | null = null;
+  housing: Housing | null = null;
   isLoading: boolean = true;
   errorMessage: string = '';
   propertyId: number = 0;
 
   // Gunakan data dari shared file
-  private housingData: any[] = []; // Asumsi: Array of Housing
+  private housingData: Housing[] = HOUSING_DATA;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) {
-    // Asumsi: HOUSING_DATA di-import dan di-assign
-    // this.housingData = HOUSING_DATA;
-  }
+  ) {}
 
   ngOnInit(): void {
     // Ambil ID dari route parameter
     this.route.params.subscribe(params => {
-      // +params['id'] untuk konversi string ke number
-      this.propertyId = +params['id']; 
+      this.propertyId = +params['id']; // + untuk convert string ke number
       this.loadPropertyDetail();
     });
   }
@@ -45,25 +37,19 @@ export class Detail implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Simulasi delay Loading (seperti API call)
+    // Simulasi delay loading (seperti API call)
     setTimeout(() => {
       // Cari data berdasarkan ID
-      const foundHousing = this.housingData.find(
-        (h: any) => h.id === this.propertyId
-      );
-
+      const foundHousing = this.housingData.find(h => h.id === this.propertyId);
+      
       if (foundHousing) {
         this.housing = foundHousing;
         this.isLoading = false;
-        console.log('Detail properti berhasil dimuat!', foundHousing);
+        console.log('Detail properti berhasil dimuat:', foundHousing);
       } else {
         this.errorMessage = 'Properti tidak ditemukan.';
         this.isLoading = false;
-        console.error(
-          'Properti dengan ID',
-          this.propertyId,
-          'tidak ditemukan'
-        );
+        console.error('Properti dengan ID', this.propertyId, 'tidak ditemukan');
       }
     }, 500); // Delay 500ms untuk UX yang lebih baik
   }
@@ -83,7 +69,7 @@ export class Detail implements OnInit {
 
   // Get badge class berdasarkan status
   getStatusClass(status: string): string {
-    switch (status.toLowerCase()) {
+    switch(status.toLowerCase()) {
       case 'available':
         return 'bg-success';
       case 'pending':
@@ -97,7 +83,7 @@ export class Detail implements OnInit {
 
   // Get type badge class
   getTypeClass(type: string): string {
-    switch (type.toLowerCase()) {
+    switch(type?.toLowerCase()) {
       case 'rumah':
         return 'bg-primary';
       case 'apartemen':
@@ -109,4 +95,3 @@ export class Detail implements OnInit {
     }
   }
 }
- 
