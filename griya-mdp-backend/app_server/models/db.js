@@ -16,4 +16,3 @@ mongoose.connection.on("error", (error) => {
 mongoose.connection.on("disconected", () => {
     console.log("Disconnected From MongoDB");
 });
-
